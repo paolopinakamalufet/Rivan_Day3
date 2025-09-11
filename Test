@@ -92,6 +92,115 @@ conf t
 
 Host Route vs Network Route
  
+Review
+Jobs of a router:
+1.
+2.
+3.
+4.
+5.
+
+Static/Default Routing = Minimum Wage
+OSPF/EIGRP = 30k-40k
+BGP = 100k up
+VPN = 30-40k
+
+&nbsp;
+---
+&nbsp;
+
+Routing - forwards data based on L3 information (IP Address)
+- Linux: netstat -rn
+- Windows: route print
+- Cisco: show ip interface brief
+
+&nbsp;
+---
+&nbsp;
+
+Master Routing
+Route Switch TShoot Hayup Lab
+
+Login: root
+Pass: C1sc0123
+
+Devices
+enable secret: pass
+
+&nbsp;
+---
+&nbsp;
+
+Static routing
+
+Why routing?
+
+From R1, 
+ping 10.1.1.2  vs  ping 10.1.1.5
+
+Is the result normal?
+
+
+Configure Static routes to make them ping:
+
+Recipe:
+ip route [Destination IP]  [Network/Host Mask]  [Interface / Nex-hop]
+
+!@R1
+conf t
+ ip route 10.1.1.5 255.255.255.255 10.1.1.2
+ end
+
+
+Exercise 01: Configure a static route on R2 destined for R3's e1/2 interface.
+
+!@R2
+conf t
+ ip route __.__.__.__  __.__.__.__  __.__.__.__
+ end
+
+Ans
+
+!@R2
+conf t
+ ip route 10.1.1.9 255.255.255.255 10.1.1.6
+ end
+
+---
+
+!@R1
+conf t
+ ip route 10.1.1.6 255.255.255.255 10.1.1.2
+ end
+ 
+Routing must be two way
+
+!@R3
+conf t
+ ip route 10.1.1.1 255.255.255.255 10.1.1.5
+ end
+ 
+ 
+---
+
+Host Route vs Network Route
+
+!@R3
+show ip route static
+
+!@R1
+show int e1/0
+
+!@R3
+show ip route static
+conf t
+ ip route 10.1.1.0 255.255.255.252 10.1.1.5
+ 
+ 
+ 
+ 
+ 
+ 
  
  
  
