@@ -38,6 +38,84 @@ enable secret: pass
 ---
 &nbsp;
 
+
+REVIEW on IP addressing
+
+DHCP Loadbalancing
+
+!@D1
+conf t
+ ip dhcp excluded-address 10.2.1.1 10.2.1.100
+ ip dhcp pool MGMTPOOL.COM
+  network 10.2.1.0 255.255.255.0
+  default-router 10.2.1.254
+  domain-name MGMTPOOL.COM
+  dns-server 10.2.1.10
+ !
+ int e1/0
+  switchport mode access
+  switchport access vlan 100
+  end
+
+!@D2
+conf t
+ ip dhcp excluded-address 10.2.1.1 10.2.1.200
+ ip dhcp pool MGMTPOOL.COM
+  network 10.2.1.0 255.255.255.0
+  default-router 10.2.1.254
+  domain-name MGMTPOOL.COM
+  dns-server 10.2.1.10
+ !
+ int e1/0
+  switchport mode access
+  switchport access vlan 20
+  end
+
+
+Exercise 03: Review - Place PCs (P1, P2) on VLAN 10
+
+!@A1
+conf t
+ int e0/0
+  switchport mode access
+  switchport access vlan 10
+  end
+
+!@A2
+conf t
+ int e1/0
+  switchport mode access
+  switchport access vlan 10
+  end
+
+Make P1 & P2 a DHCP client:
+
+!@P1
+conf t
+ int e0/0
+  no shut
+  ip add dhcp
+  end
+
+!@P2
+conf t
+ int e1/0
+  no shut
+  ip add dhcp
+  end
+
+
+What IP addresses did P1 & P2 get?
+
+!@P1 & P2
+show ip int brief | ex una
+
+
+
+---
+
+
+
 Static routing
 
 Why routing?
@@ -52,6 +130,10 @@ Configure Static routes to make them ping:
 
 Recipe:
 ip route [Destination IP]  [Network/Host Mask]  [Interface / Nex-hop]
+
+Rules of Static Routing:
+1. Ping Dikit, Route not Dikit
+
 
 !@R1
 conf t
@@ -80,7 +162,7 @@ conf t
 
 
 
-Static Routing must be Two-way
+2. Static Routing must be Two-way
 
 !@R1
 conf t
@@ -99,11 +181,17 @@ conf t
 
 Host Route vs Network Route
 
+Configure a Network route on R3 destined for R1 & R2's connected network.
+
 !@R3
 show ip route static
 
+Check the Network Mask of an interface: 3 ways
 !@R1
+show run
 show int e1/0
+show ip route 
+
 
 !@R3
 show ip route static
@@ -111,7 +199,10 @@ conf t
  ip route 10.1.1.0 255.255.255.252 10.1.1.5
  end
  
- 
+
+---
+
+Make R1 ping R4
 
 !@R1
 conf t
@@ -126,14 +217,13 @@ ping 10.1.1.9
 vs
 
 !@R1
-ping 10.1.1.8
+ping 10.1.1.10
 
 
 Exercise 02: Configure a network static route on R4 destined to R1's e1/0 interface
 
 !@R4
 conf t
- ip route 10.1.1.__ 255.255.255.252 10.1.1.__
  ip route 10.1.1.__ 255.255.255.252 10.1.1.__
  end
 
@@ -143,7 +233,6 @@ Ans
 !@R4
 conf t
  ip route 10.1.1.0 255.255.255.252 10.1.1.9
- ip route 10.1.1.4 255.255.255.252 10.1.1.9
  end
  
 !@R2
@@ -152,9 +241,641 @@ conf t
  end
 
 
+3. The next-hop device must also know how to route the packet
+
+Tip: R2 cannot reach R1; R4 cannot reach 
+
+ans
+
+!@R2
+conf t
+ ip route 10.1.1.8 255.255.255.252 10.1.1.6
+ end
+ 
+!@R4
+conf t
+ ip route 10.1.1.4 255.255.255.252 10.1.1.9
+ end
+
+
+
+
 ---
 
-L3 vs L2 Switch
+Default Route
+
+Floating static route
+
+!@A1
+conf t
+ ip route 0.0.0.0 0.0.0.0 192.168.1.129 1
+ ip route 0.0.0.0 0.0.0.0 192.168.1.130 10
+ end
+
+
+Verify:
+
+!@A1
+show ip route static
+conf t
+ no ip route 0.0.0.0 0.0.0.0 192.168.1.129 1
+show ip route static
+
+Bring back the primary
+
+!@A1
+conf t
+ ip route 0.0.0.0 0.0.0.0 192.168.1.129 1
+ end
+show ip route static
+
+
+
+
+Exercise 03: Configure default routes on A2 with the following settings:
+- D2 must be the primary gateway
+- D1 must be the secondary gateway
+
+!@A2
+conf t
+ ip route 0.0.0.0 0.0.0.0 192.168.1.__  __
+ ip route 0.0.0.0 0.0.0.0 192.168.1.__  __
+ end
+
+Ans
+
+!@A2
+conf t
+ ip route 0.0.0.0 0.0.0.0 192.168.1.130  1
+ ip route 0.0.0.0 0.0.0.0 192.168.1.129  10
+ end
+
+
+---
+
+Static Routing: Path Selection - Longest Prefix Rule
+
+!@P1
+ping 10.2.2.1
+
+vs
+
+!@P1
+ping 192.168.1.129
+ping 192.168.1.130
+
+Routing Policies, configure routing with the least hop count possible.
+
+Path Selection Rules:
+1. Longest Prefix
+
+!@P1
+conf t
+ ip route 192.168.1.128 255.255.255.224 10.2.1.1
+ end
  
+Verify:
+
+!@P1
+traceroute 192.168.1.129
+
+
+Why does P1 need to take 2 hop counts to reach D2's VLAN 100?
+
+Configure a host static route that takes advantage of the longest prefix rule to allow P1 to go directly to D2 instead of D1.
+
+!@P1
+conf t
+ ip route 192.168.1.130 255.255.255.255 10.2.1.2
+ end
  
+Verify:
+
+!@P1
+show ip route static
  
+Why longest prefix?
+
+1 1 1 1  1 1 1 1    1 1 1 1  1 1 1 1    1 1 1 1  1 1 1 1    1 1 1 0  0 0 0 0 = /27
+1 1 1 1  1 1 1 1    1 1 1 1  1 1 1 1    1 1 1 1  1 1 1 1    1 1 1 1  1 1 1 1 = /32
+
+
+Verify:
+
+!@P1
+traceroute 192.168.1.129
+traceroute 192.168.1.131
+traceroute 192.168.1.132
+
+vs
+
+traceroute 192.168.1.130
+
+
+---
+
+Exercise 04: Configure static routes on P2, destine for VLAN 100 with the least hop counts possible to D1, D2, A1, and A2.
+
+!@P2
+conf t
+ ip route 192.168.1.__  __.__.__.__  __.__.__.__
+ ip route 192.168.1.__  __.__.__.__  __.__.__.__
+ end
+
+Ans
+
+!@P2
+conf t
+ ip route 192.168.1.128 255.255.255.224 10.2.1.2
+ ip route 192.168.1.129 255.255.255.255 10.2.1.1
+ end
+
+
+Exam Qustion
+
+Which Route will P1 use to reach 192.168.1.130 ?
+
+
+S*    0.0.0.0/0 [254/0] via 10.2.1.254
+      10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+
+C        10.2.1.0/24 is directly connected, Ethernet0/0
+
+L        10.2.1.101/32 is directly connected, Ethernet0/0
+      192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+
+S        192.168.1.128/27 [1/0] via 10.2.1.1
+
+S        192.168.1.130/32 [1/0] via 10.2.1.2
+
+
+---
+
+
+The need for Dynamc routing protocols
+
+IGP - Internal Gateway Protocols
+- Link-state = OSPF & ISIS
+- Distance Vector = EIGRP & RIP
+
+EGP - Exterior Gateway Protocols
+- BGP = Border Gateway Protocol
+
+---
+
+EIGRP
+
+Advertise Connected Routes
+
+!@R4
+conf t
+ router eigrp 100
+  no auto-summary
+  network 10.1.4.8 0.0.0.3
+  network 10.1.4.4 0.0.0.3
+  end
+  
+!@D1
+config t
+ router eigrp 100
+  no auto-summary
+  network 10.1.4.4 0.0.0.3
+  network 10.2.1.0 0.0.0.255
+  network 10.2.2.0 0.0.0.255
+  network 192.168.1.128 0.0.0.31
+end
+
+
+Exercise 05 Configure EIGRP on D2. Advertise all connected routes.
+
+!@D2
+config t
+ router ____  ____
+  no auto-summary
+  network __.__.__.__  __.__.__.__
+  network __.__.__.__  __.__.__.__
+  network __.__.__.__  __.__.__.__
+  network __.__.__.__  __.__.__.__
+  end
+
+
+Ans
+
+!@D2
+conf t
+ router eigrp 100
+  no auto-summary
+  network 10.1.4.8 0.0.0.3
+  network 10.2.1.0 0.0.0.255
+  network 10.2.2.0 0.0.0.255
+  network 192.168.1.128 0.0.0.31
+  end
+
+---
+
+OPTIONAL
+
+Named EIGRP / Multi Address-Family EIGRP
+When you are using NEXUS, address family is required.
+
+!@R4
+conf t
+ router eigrp CCNPLEVEL
+  address-family ipv4 unicast autonomous-system 100
+   network 10.1.4.8 0.0.0.3
+   network 10.1.4.4 0.0.0.3
+   end
+   
+!@D1
+conf t
+ router eigrp CCNPLEVEL
+  address-family ipv4 unicast autonomous-system 100
+   network 10.1.4.4 0.0.0.3
+   network 10.2.1.0 0.0.0.255
+   network 10.2.2.0 0.0.0.255
+   network 192.168.1.128 0.0.0.31
+   end
+  
+!@D2
+conf t
+ router eigrp CCNPLEVEL
+  address-family ipv4 unicast autonomous-system 100
+   network 10.1.4.8 0.0.0.3
+   network 10.2.1.0 0.0.0.255
+   network 10.2.2.0 0.0.0.255
+   network 192.168.1.128 0.0.0.31
+   end
+
+---
+
+Data Structure
+1. show ip eigrp neighbors : Neighbor Table
+2. show ip eigrp interfaces : Interface Table
+3. show ip eigrp topology : Topology Table
+
+Verify:
+
+show ip protocols
+show ip eigrp neighbors
+show ip eigrp interfaces
+show ip eigrp topology
+show ip route eigrp
+
+
+
+Path Selection Rule 2: Administrative Distance
+Connected AD: 0
+Static AD: 1
+EIGRP AD: 
+EIGRP Metric Cost: 
+
+
+What makes EIGRP a distance Vector protocol?
+
+EIGRP Path Selection:
+Reported Distance (RD) > Feasible Successor (Backup)
+Feasible Distance (FD) >  Successor (Lowest Cost)
+
+	Successor
+	
+	Feasability Condition
+		An EIGRP route is a feasible successor route if the RD from the neighbor is less than the FD of the successor route.
+
+FD/RD
+
+
+EIGRP Loadbalancing
+
+Maximum Paths vs Variance (Unequal Cose)
+
+!@R4
+conf t
+ router eigrp 100
+  variance 2
+  traffic-share balanced
+  end
+show ip eigrp traffic
+
+
+---
+
+OSPF (Single Area OSPF)
+
+Advertise Connected Routes
+
+!@R3
+conf t
+ router ospf 1
+  router-id 3.3.3.3
+  network 3.3.3.3 0.0.0.0 area 0
+  network 10.1.1.8 0.0.0.3 area 0
+  network 10.1.1.4 0.0.0.3 area 0
+  end
+
+Exercise 06: Configure OSPF on R4 with the following settings:
+- Process ID must be 1
+- Advertise all connected routes that belong to OSPF area 0
+- All of R4's interface belongs to Area 0
+- Set R4's router id for OSPF as its loopback 4 IP
+
+!@R4
+conf t
+ router ___  __
+  router-id __.__.__.__
+  network __.__.__.__  __.__.__.__ area __
+  network __.__.__.__  __.__.__.__ area __
+  end
+
+
+Ans
+
+!@R4
+conf t
+ router ospf 1
+  router-id 4.4.4.4
+  network 4.4.4.4 0.0.0.0 area 0
+  network 10.1.1.8 0.0.0.3 area 0
+  end
+
+
+OSPF Interface-specific configuration.
+
+!@R2
+conf t
+ router ospf 1
+  router-id 2.2.2.2
+  exit
+ int lo2
+  ip ospf 1 area 0
+  exit
+ int e1/1
+  ip ospf 1 area 0
+  exit
+ int e1/2
+  ip ospf 1 area 0
+  end
+
+!@R1
+conf t
+ router ospf 1
+  router-id 1.1.1.1
+  exit
+ int lo1
+  ip ospf 1 area 0
+  exit
+ int e1/0
+  ip ospf 1 area 0
+  end
+
+---
+
+---
+
+Data Structure
+1. show ip ospf neighbors : Neighbor Table
+2. show ip ospf interface brief : Interface Table
+3. show ip ospf topology-info : Topology Table
+
+Verify:
+
+show ip protocols
+show ip ospf neighbors
+show ip ospf interface brief
+show ip ospf topology-info 
+show ip route ospf
+
+
+
+OSPF Network Types and Priorities.
+
+Exercise 05: Ensure R3 is the DR of the OSPF Area by completing the following tasks:
+- Eliminate the need for a DR/BDR election between R4 & R3
+- Configure R1 to be ineligible to become a DR/BDR
+- Configure R2 with the highest priority on its e1/2 interface.
+
+!@R4
+conf t
+ int e1/2
+  ip ospf network point-to-point
+  end
+
+
+!@R3
+conf t
+ int e1/2
+  ip ospf network point-to-point
+  end
+  
+
+!@R2
+conf t
+ int e1/2
+  ip ospf priority 255
+  end
+  
+
+!@R1
+conf t
+ int e1/0
+  ip ospf priority 0
+  end
+
+
+---
+
+What Makes OSPF Link-state?
+
+Capture Hello Packets:
+
+!@R4
+conf t
+ int e3/3
+  no shut
+  ip add 208.8.8.100 255.255.255.0
+  ip ospf 1 area 0
+  end
+
+
+OSPF Hello Packet
+
+- Router ID/Source OSPF Router
+- Area ID
+- Subnet Mask
+- Authentication Type
+
+- Hello Timer: 10
+- Dead Timer: 40
+- Designated Router
+- Backup Designated Router
+
+!@R3
+show ip ospf traffic
+show ip ospf database
+show ip ospf database network
+
+---
+
+OSPF States
+
+D - Down
+I - Init
+T - Two-way
+E - Exstart
+E - Exchange
+L - Loading
+F - Full
+
+
+Neighborship vs Adjacency
+- Same Area
+- Same Subnet Mask/Network
+- Same Network Type
+- Same Process ID
+- Same Hello Interval
+- Same Dead Interval
+
+Practice Doing the wrong things
+
+Mismatched Network Type
+
+!@R3
+conf t
+ int e1/2
+  no ip ospf network point-to-point
+  end
+show ip ospf neighbor
+clear ip ospf process
+yes
+
+!@R1
+show ip route ospf
+
+---
+
+!@R3
+show ip ospf int e1/2
+
+!@R4
+show ip ospf int e1/2
+
+
+Determine the issue why R3 & R4 fail to form an adjacency:
+
+
+
+Fix the adjacency:
+
+!@R3
+conf t
+ int e1/2
+  ip ospf network point-to-point
+  end
+show ip ospf neighbor
+clear ip ospf process
+yes
+ 
+
+
+
+---
+
+Mismatched Hello & Dead Timers
+
+Remove the Adjacency of R2 & R1
+!@R2
+conf t
+ int e1/2
+  ip ospf hello-interval 20
+  ip ospf dead-interval 60
+  end
+show ip ospf neighbor
+clear ip ospf process
+
+---
+
+!@R2
+show ip ospf int e1/2
+
+!@R1
+show ip ospf int e1/0
+
+
+Determine the issue why R2 & R1 fail to form an adjacency:
+
+
+Fix the adjacency:
+
+!@R2
+conf t
+ int e1/2
+  ip ospf hello-interval 10
+  ip ospf dead-interval 40
+  end
+show ip ospf neighbor
+clear ip ospf process
+
+
+
+
+
+
+
+---
+
+What makes OSPF Link-State? 
+It builds a topology of the network.
+
+LSU - Link-State Updates
+LSA - Link-State Advertisement
+
+Type 1 LSA - (O) Router LSA
+Type 2 LSA - (O IA) Network LSA
+Type 3 LSA - Summary LSA
+
+---
+
+Optimize OSPF Network
+Set loop back IPs Passive interface
+
+!@R1
+conf t
+ router ospf 1
+  passive-interface lo1
+  end
+
+Exercies 06: Configure R2,R3, & R4's loopbacck IP for passive interfaces.
+
+!@R2
+conf t
+ router ospf 1
+  passive-interface lo2
+  end
+
+!@R3
+conf t
+ router ospf 1
+  passive-interface lo3
+  end
+ 
+!@R4
+conf t
+ router ospf 1
+  passive-interface lo4
+  end
+
+
+---
+
+OSPF & EIGRP Redistribution
+
+!@R4
+config T
+ router eigrp 100
+  redistribute ospf 1 metric 10000 100 255 1 1500
+  exit
+ router ospf 1
+  redistribute eigrp 100 subnets
+end
+
+
+---
