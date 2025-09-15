@@ -1670,7 +1670,21 @@ Exercise 20: Configure P1, P2, S1, & S2 to successfully ping 8.8.8.8
 
 They do not have default routes
 
+!@P1,P2
+conf t
+ ip route 0.0.0.0 0.0.0.0 10.2.1.1
+ end
 
+
+!@S1
+conf t
+ ip route 0.0.0.0 0.0.0.0 192.168.1.129
+ end
+
+!@S2
+conf t
+ ip route 0.0.0.0 0.0.0.0 10.2.2.2
+ end
 
 Why are end devices configured with default routes.
 
@@ -1709,7 +1723,39 @@ Why are end devices configured with default routes.
 IP SLA
 
 
+conf t 
+ ip sla 1
+  icmp-echo 8.8.8.8
+  frequency 10
+ ip sla schedule 1 life forever start-time now
+ end
 
+TRACK
+
+conf t
+ track 1 ip sla 1 reachability 
+ track 1 ip sla 1 state
+  delay up 5
+  delay down 10
+ end
+
+ROUTE-MAP
+
+conf t
+ route-map NAT-FAILOVER-PLDT permit 10
+  match ip address 1
+  set int e1/2
+ route-map NAT-FAILOVER-GLOBE permit 20
+  match ip address 1
+  set int e1/3
+  end
+  
+ route-map NAT-FAILOVER permit 10
+  match track 1
+  set int e1.2
+  
+
+  
 
 
 
