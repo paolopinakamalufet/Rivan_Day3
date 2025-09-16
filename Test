@@ -83,7 +83,8 @@ conf t
   end
 
 
-Exercise 03: Review - Place PCs (P1, P2) on VLAN 10
+
+Review - Place PCs (P1, P2) on VLAN 10
 
 !@A1
 conf t
@@ -127,6 +128,22 @@ show ip int brief | ex una
 Exercise 02: Configure S1 for VLAN 100, and manually set the IP address, 192.168.1.133 /27, on S1's e1/0 interface.
 - Make sure S1 is able to ping D1, D2, A1, & A2 on VLAN 100.
 
+!@S1
+conf t
+
+
+
+  end
+
+!@D1
+conf t
+
+
+
+  end
+
+
+
 Ans
 
 !@S1
@@ -147,6 +164,22 @@ conf t
 Exercise 03: Configure S2 for VLAN 20, and manually set the IP address, 10.2.2.133 /24, on S2's e1/0 interface.
 - Make sure S2 is able to ping D1 & D2 on VLAN 20.
 
+!@S2
+conf t
+
+
+
+  end
+
+!@D2
+conf t
+
+
+
+  end
+  
+  
+  
 Ans
 
 !@S2
@@ -167,6 +200,11 @@ conf t
 
 
 
+
+
+
+
+
 # INTRO
 # Static routing
 
@@ -177,9 +215,11 @@ ping 10.1.1.2  vs  ping 10.1.1.5
 
 Is the result normal?
 
+
+
 Configure Static routes to make them ping:
 
-Recipe:
+Syntax:
 ip route [Destination IP]  [Network/Host Mask]  [Interface / Nex-hop]
 
 What is a next-hop?
@@ -236,6 +276,11 @@ conf t
 
 Exercise 05: Configure a static route on R1 destined for R3's e1/1 interface.
 
+!@R1
+conf t
+ ip route __.__.__.__  __.__.__.__  __.__.__.__
+ end
+
 
 Ans
 
@@ -250,6 +295,9 @@ Routing must be two way
 conf t
  ip route 10.1.1.1 255.255.255.255 10.1.1.5
  end
+  
+  
+  
   
 ---
 
@@ -333,6 +381,9 @@ conf t
  ip route 10.1.1.0 255.255.255.252 10.1.1.9
  end
  
+ 
+ 
+
 
 3. The next-hop device must also know how to route the packet
 
@@ -366,7 +417,7 @@ Source IP, Destination IP
 
 
 
-Extra:
+Static route using interface instead of next-hop IP
 
 Configure a static host route on R3, destined for R4's 10.1.4.9 IP using both a next-hop address and interface.
 
@@ -376,7 +427,9 @@ conf t
  end
 
 
------
+
+
+
 
 
 ---
@@ -721,6 +774,16 @@ conf t
   traffic-share balanced
   end
 
+or 
+
+!@R4
+conf t
+ router eigrp CCNPLEVEL
+  address-family ipv4 unicast autonomous-system 100
+   topology base
+    variance 2
+    traffic-share balanced
+    end
 
 
 Review
@@ -1166,7 +1229,12 @@ conf t
   address-family ipv4 unicast autonomous-system 100
    topology base
     redistribute ospf 1 metric 10000 100 255 1 1500
-   end
+	exit
+   exit
+  exit
+ router ospf 1
+  redistribute eigrp 100 subnets
+    end
    
 ---
 
@@ -1693,8 +1761,92 @@ Why are end devices configured with default routes.
 
 
 
+-----
+
+IPv6
+
+Does your device support IPv6?
 
 
+What is a valid IPv6 address?
+
+
+IPv6 compression rules
+
+1. All zeroes on the left are ommitted.
+
+:00a0:  >   :a0:
+
+2. Subsequent zeroes turn into double colon.
+
+:0000:0000:0000:00a0:  >  ::a0:
+
+3. When there are two subsequent zeroes, the one with more zeroes gets turned into :
+while the other zeroes becom :0:
+
+:0000:0000:00a0:0000:0000:0000:  >  :0:0:a0::
+
+4. When subsequent zeroes match on both sides, the one on the left turns into double colon.
+
+:0000:0000:00a0:0000:0000:  >  ::a0:0:0:
+
+
+Exercise 21: Compress IPv6 address
+
+1. 000a:000c:0000:0000:0000:0000:0000:0000/64 =
+	
+2. 0000:0000:0000:0000:0000:0000:0000:0000/0 = 
+			
+3. fe80:0000:0000:0000:000a:0000:0000:000f/64 =
+	
+4. 2002:6500:0000:3000:0000:0000:0000:0000/64 = 
+	
+5. 0000:0000:0000:0000:0000:0000:0000:0001/128 = 
+	
+6. ff00:0000:0000:beef:a00a:0aa0:0000:0000/8 = 
+
+
+---
+
+
+IPv6 subnetting
+
+
+8  4  2   1    8  4  2   1     8  4  2   1    8  4  2   1 
+
+
+IPV6 SUBNETTING (HOSTS):
+fec0:aabb:fafa:dada::/64 subnet for 48 users:
+Convert:
+S:
+Ipasok:
+
+
+
+IPV6 SUBNETTING (SUBNETS):
+fec0:aabb:fafa:dada::/64 subnet to 22 offices/subnets:
+Convert:  22 -> 5bits
+Add: /64 + /5 = /69
+Ipasok:
+
+
+
+
+
+
+
+---
+
+
+IPv6 Static & Default Routing
+
+
+
+IPv6 Transition Technology
+
+
+
+IPv6 autoconfig
 
 
 
