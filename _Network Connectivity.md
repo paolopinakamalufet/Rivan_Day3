@@ -369,16 +369,6 @@ Place PCs (__P1__, __P2__) on __VLAN 10__
 <br>
 <br>
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
 <details>
 <summary>Show Answer</summary>
@@ -410,16 +400,6 @@ conf t
 ### DHCP Clients
 Make P1 & P2 a DHCP client.
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 <br>
 <br>
 <br>
@@ -485,45 +465,78 @@ show ip int brief | ex una
 ---
 &nbsp;
 
----
-
-Exercise 02: Configure S1 for VLAN 100, and manually set the IP address, 192.168.1.133 /27, on S1's e1/0 interface.
+### 🎯 Exercise 02: Configure S1 for VLAN 100, and manually set the IP address, `192.168.1.133 /27`, on S1's e1/0 interface.
 - Make sure S1 is able to ping D1, D2, A1, & A2 on VLAN 100.
 
 !@S1
 conf t
+ _______
+ _______
+ _______
+ end
 
 
-
-  end
 
 !@D1
 conf t
+ _______
+ _______
+ _______
+ end
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-
-  end
-
-
-
-Ans
-
+<details>
+<summary>Show Answer</summary>
+  
+~~~
 !@S1
 conf t
  int e1/0
   ip add 192.168.1.133 255.255.255.224
   no shut
   end
+~~~
 
+~~~
 !@D1
 conf t
  int e1/0
   switchport mode access
   switchport access vlan 100
   end
+~~~
+
+</details>
 
 
-Exercise 03: Configure S2 for VLAN 20, and manually set the IP address, 10.2.2.133 /24, on S2's e1/0 interface.
+
+### 🎯 Exercise 03: Configure S2 for VLAN 20, and manually set the IP address, 10.2.2.133 /24, on S2's e1/0 interface.
 - Make sure S2 is able to ping D1 & D2 on VLAN 20.
 
 !@S2
