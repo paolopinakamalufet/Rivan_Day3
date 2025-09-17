@@ -268,3 +268,183 @@ A routing table is a database, also known as a FIB (Forwarding Information Base)
 - Linux: `netstat -rn`
 - Windows: `route print`
 - Cisco: `show ip interface brief`
+
+<br>
+<br>
+
+---
+&nbsp;
+
+# Master Routing using `Route Switch TShoot Hayup Lab`
+~~~
+Login: root
+Pass: C1sc0123
+
+Devices
+Secret: pass
+~~~
+
+&nbsp;
+---
+&nbsp;
+
+### 🎯 Exercise 01: Review on DHCP & IP addressing.
+What are the steps to configure DHCP?
+1. Exclude IP addresses
+2. Create DHCP pool
+  - Network
+  - Default-Router
+  - Domain-Name
+  - DNS-server
+
+3. Assign DHCP clients
+
+<br>
+
+### DHCP Loadbalancing
+~~~
+!@D1
+conf t
+ ip dhcp excluded-address 10.2.1.1 10.2.1.100
+ ip dhcp pool MGMTPOOL.COM
+  network 10.2.1.0 255.255.255.0
+  default-router 10.2.1.254
+  domain-name MGMTPOOL.COM
+  dns-server 10.2.1.133
+  end
+~~~
+
+~~~
+!@D2
+conf t
+ ip dhcp excluded-address 10.2.1.1 10.2.1.200
+ ip dhcp pool MGMTPOOL.COM
+  network 10.2.1.0 255.255.255.0
+  default-router 10.2.1.254
+  domain-name MGMTPOOL.COM
+  dns-server 10.2.1.133
+  end
+~~~
+
+&nbsp;
+---
+&nbsp;
+
+### VLAN Assignment
+Place PCs (P1, P2) on VLAN 10
+
+~~~~
+!@A1
+conf t
+ int e0/0
+  switchport mode access
+  switchport access vlan 10
+  end
+~~~
+
+~~~
+!@A2
+conf t
+ int e1/0
+  switchport mode access
+  switchport access vlan 10
+  end
+~~~
+
+### DHCP Clients
+
+Make P1 & P2 a DHCP client:
+
+!@P1
+conf t
+ int e0/0
+  no shut
+  ip add dhcp
+  end
+
+!@P2
+conf t
+ int e1/0
+  no shut
+  ip add dhcp
+  end
+
+
+What IP addresses did P1 & P2 get?
+
+!@P1 & P2
+show ip int brief | ex una
+
+
+---
+
+Exercise 02: Configure S1 for VLAN 100, and manually set the IP address, 192.168.1.133 /27, on S1's e1/0 interface.
+- Make sure S1 is able to ping D1, D2, A1, & A2 on VLAN 100.
+
+!@S1
+conf t
+
+
+
+  end
+
+!@D1
+conf t
+
+
+
+  end
+
+
+
+Ans
+
+!@S1
+conf t
+ int e1/0
+  ip add 192.168.1.133 255.255.255.224
+  no shut
+  end
+
+!@D1
+conf t
+ int e1/0
+  switchport mode access
+  switchport access vlan 100
+  end
+
+
+Exercise 03: Configure S2 for VLAN 20, and manually set the IP address, 10.2.2.133 /24, on S2's e1/0 interface.
+- Make sure S2 is able to ping D1 & D2 on VLAN 20.
+
+!@S2
+conf t
+
+
+
+  end
+
+!@D2
+conf t
+
+
+
+  end
+  
+  
+  
+Ans
+
+!@S2
+conf t
+ int e1/0
+  ip add 10.2.2.133 255.255.255.0
+  no shut
+  end
+
+!@D2
+conf t
+ int e1/0
+  switchport mode access
+  switchport access vlan 20
+  end
