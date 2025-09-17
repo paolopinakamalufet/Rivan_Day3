@@ -245,3 +245,26 @@ L        192.168.100.195/32 is directly connected, Loopback1
 
 ---
 &nbsp;
+
+# 🏢 Establish Network Connectivity
+
+Jobs of a router:  
+1. &nbsp;
+2. &nbsp;
+3. &nbsp;
+4. &nbsp;
+5. &nbsp;
+
+Static/Default Routing = Minimum Wage  
+OSPF/EIGRP = 30k-40k  
+BGP = 100k up  
+VPN = 30-40k  
+
+<br>
+
+## Job Interview Questions for L1/L2 NOC-MSP postions.
+### Interpret the components of a Routing Table.
+A routing table is a database, also known as a FIB (Forwarding Information Base), used by network devices to determine the most efficient path for data packets as they travel across a network.
+- Linux: `netstat -rn`
+- Windows: `route print`
+- Cisco: `show ip interface brief`
