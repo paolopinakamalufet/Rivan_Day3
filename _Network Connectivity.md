@@ -713,30 +713,28 @@ conf t
 ---
 &nbsp;
 
-
-
-
-
-
-Host Route vs Network Route
+### Host Route vs Network Route
 
 Exercise 06: Review. Find the network of the following IP addresses:
-- 10.1.100.79 /18
-- 172.16.145.18 /20
-- 192.168.1.205 /30 
-
-Ans
-
-10.1.100.79 /18 (3rd, 64i)
-= 10.1.64.0 /18
-
-172.16.145.18 /20 (3rd, 16i)
-= 172.16.144.0 /20
-
-192.168.1.205 /30 (4th, 4i)
-= 192.168.1.204 /30
+| Network          | Host IP           |
+| ---              | ---               |
+|                  | 10.1.100.79 /18   |
+|                  | 172.16.145.18 /20 |
+|                  | 192.168.1.205 /30 | 
 
 
+<details>
+<summary>Show Answer</summary>
+	
+| Network           | Host IP           |
+| ---               | ---               |
+| 10.1.64.0 /18     | 10.1.100.79 /18   |
+| 172.16.144.0 /20  | 172.16.145.18 /20 |
+| 192.168.1.204 /30 | 192.168.1.205 /30 | 
+ 
+</details>
+
+<br>
 
 Configure a Network route on R3 destined for R1 & R2's connected network.
 
