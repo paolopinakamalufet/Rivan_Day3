@@ -275,7 +275,7 @@ A routing table is a database, also known as a FIB (Forwarding Information Base)
 ---
 &nbsp;
 
-# Master Routing using `Route Switch TShoot Hayup Lab`
+## Master Routing using `Route Switch TShoot Hayup Lab`
 ~~~
 Login: root
 Pass: C1sc0123
@@ -298,6 +298,16 @@ What are the steps to configure DHCP?
   - DNS-server
 
 3. Assign DHCP clients
+
+<br>
+
+### DHCP Process
+| Acronym | Full Form   | Traffic Type |
+| ---     | ---         | ---          |
+| D       | Discover    | Broadcast    |
+| O       | Offer       | Unicast      |
+| R       | Request     | Broadcast    |
+| A       | Acknowledge | Unicast      |
 
 <br>
 
@@ -331,9 +341,9 @@ conf t
 &nbsp;
 
 ### VLAN Assignment
-Place PCs (P1, P2) on VLAN 10
+Place PCs (__P1__, __P2__) on __VLAN 10__
 
-~~~~
+~~~
 !@A1
 conf t
  int e0/0
@@ -352,22 +362,26 @@ conf t
 ~~~
 
 ### DHCP Clients
+Make P1 & P2 a DHCP client.
 
-Make P1 & P2 a DHCP client:
-
+~~~
 !@P1
 conf t
  int e0/0
   no shut
   ip add dhcp
   end
+~~~
 
+~~~
 !@P2
 conf t
  int e1/0
   no shut
   ip add dhcp
   end
+~~~
+
 
 
 What IP addresses did P1 & P2 get?
