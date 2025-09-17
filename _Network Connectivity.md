@@ -288,14 +288,20 @@ Secret: pass
 ---
 &nbsp;
 
+![RST_IPv4](img/rstIPv4.png)
+
+&nbsp;
+---
+&nbsp;
+
 ### 🎯 Exercise 01: Review on DHCP & IP addressing.
-What are the steps to configure DHCP?
+What are the steps to configure DHCP?  
 1. Exclude IP addresses
 2. Create DHCP pool
     - Network
     - Default-Router
     - Domain-Name
-    - DNS-server
+    - DNS-Server
 
 3. Assign DHCP clients
 
@@ -340,9 +346,19 @@ conf t
 ---
 &nbsp;
 
-### VLAN Assignment
-Place PCs (__P1__, __P2__) on __VLAN 10__
+### VLAN Assignment - Place PCs (P1, P2) on VLAN 10
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 <br>
 <br>
@@ -397,9 +413,19 @@ conf t
 ---
 &nbsp;
 
-### DHCP Clients
-Make P1 & P2 a DHCP client.
+### DHCP Clients - Configure P1 & P2 to be a DHCP client.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 <br>
 <br>
@@ -465,9 +491,29 @@ show ip int brief | ex una
 ---
 &nbsp;
 
-### 🎯 Exercise 02: Configure S1 for VLAN 100, and manually set the IP address, `192.168.1.133 /27`, on S1's e1/0 interface.
-- Make sure S1 is able to ping D1, D2, A1, & A2 on VLAN 100.
+### 🎯 Exercise 02: Static IP addressing.
 
+| Device | VLAN | Host Address      |
+| ---    | ---  | ---               |
+| S1     | 100  | 192.168.1.133 /27 |
+| S2     | 20   | 10.2.2.133 /24    |
+
+Configure S1 & S2 for IP addressing and VLAN assinment as specified on the table above.
+Verify connectivity through the following:
+- Make sure __S1__ is able to ping __D1__, __D2__, __A1__, & __A2__ on __VLAN 100__
+- Make sure __S2__ is able to ping __D1__ & __D2__ on __VLAN 20__
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 <br>
 <br>
@@ -515,47 +561,6 @@ conf t
   switchport access vlan 100
   end
 ~~~
-
-</details>
-
-<br>
-<br>
-
----
-&nbsp;
-
-### 🎯 Exercise 03: Configure S2 for VLAN 20, and manually set the IP address, 10.2.2.133 /24, on S2's e1/0 interface.
-- Make sure S2 is able to ping D1 & D2 on VLAN 20.
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-<details>
-<summary>Show Answer</summary>
 
 ~~~
 !@S2
