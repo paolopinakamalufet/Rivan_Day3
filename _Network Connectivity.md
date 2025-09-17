@@ -673,52 +673,50 @@ conf t
 
 </details>
 
+<br>
+<br>
 
+---
+&nbsp;
 
+### 🎯 Exercise 05: Configure a static route on R1 destined for R3's e1/1 interface.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Exercise 05: Configure a static route on R1 destined for R3's e1/1 interface.
-
+~~~
 !@R1
 conf t
  ip route __.__.__.__  __.__.__.__  __.__.__.__
  end
+~~~
 
+<details>
+<summary>Show Answer</summary>
 
-Ans
-
+~~~
 !@R1
 conf t
  ip route 10.1.1.6 255.255.255.255 10.1.1.2
  end
- 
-Routing must be two way
+~~~
 
+__Routing must be two way__
+
+~~~
 !@R3
 conf t
  ip route 10.1.1.1 255.255.255.255 10.1.1.5
  end
-  
-  
-  
-  
+~~~
+
+</details>
+
+&nbsp;
 ---
+&nbsp;
+
+
+
+
+
 
 Host Route vs Network Route
 
