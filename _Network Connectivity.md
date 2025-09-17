@@ -292,10 +292,10 @@ Secret: pass
 What are the steps to configure DHCP?
 1. Exclude IP addresses
 2. Create DHCP pool
-  - Network
-  - Default-Router
-  - Domain-Name
-  - DNS-server
+    - Network
+    - Default-Router
+    - Domain-Name
+    - DNS-server
 
 3. Assign DHCP clients
 
