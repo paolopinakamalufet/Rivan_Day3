@@ -343,6 +343,28 @@ conf t
 ### VLAN Assignment
 Place PCs (__P1__, __P2__) on __VLAN 10__
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<details>
+<summary>Show Answer</summary>
+  
 ~~~
 !@A1
 conf t
@@ -361,8 +383,36 @@ conf t
   end
 ~~~
 
+</details>
+
+&nbsp;
+---
+&nbsp;
+
 ### DHCP Clients
 Make P1 & P2 a DHCP client.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<details>
+<summary>Show Answer</summary>
 
 ~~~
 !@P1
@@ -382,13 +432,22 @@ conf t
   end
 ~~~
 
+</details>
 
+<br>
 
 What IP addresses did P1 & P2 get?
 
+~~~
 !@P1 & P2
 show ip int brief | ex una
+~~~
 
+<br>
+<br>
+
+---
+&nbsp;
 
 ---
 
