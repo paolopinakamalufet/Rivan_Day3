@@ -709,13 +709,15 @@ conf t
 
 </details>
 
-&nbsp;
+<br>
+<br>
+
 ---
 &nbsp;
 
 ### Host Route vs Network Route
 
-Exercise 06: Review. Find the network of the following IP addresses:
+### 🎯 Exercise 06: Review. Find the network of the following IP addresses:
 | Network          | Host IP           |
 | ---              | ---               |
 |                  | 10.1.100.79 /18   |
@@ -735,93 +737,119 @@ Exercise 06: Review. Find the network of the following IP addresses:
 </details>
 
 <br>
+<br>
 
-Configure a Network route on R3 destined for R1 & R2's connected network.
+__Configure a Network route on R3 destined for R1 & R2's connected network.__
 
+~~~
 !@R3
 show ip route static
-
+~~~
 
 Check the Network Mask of an interface: 3 ways
+~~~
 !@R1
 show run
 show int e1/0
 show ip route 
+~~~
 
-
+~~~
 !@R3
 show ip route static
 conf t
  ip route 10.1.1.0 255.255.255.252 10.1.1.5
  end
 show ip route static
+~~~
 
-
-
-
-
+&nbsp;
 ---
+&nbsp;
 
 Make R1 ping R4
 
+~~~
 !@R1
 conf t
  ip route 10.1.1.8 255.255.255.252 10.1.1.2
  end 
+~~~
+
 
 Verify:
-
+~~~
 !@R1
 ping 10.1.1.9
-
 vs
-
-!@R1
 ping 10.1.1.10
+~~~
 
+<br>
+<br>
 
+---
+&nbsp;
 
-Exercise 07: Configure a static network route on R4 destined to R1's e1/0 interface
+### 🎯 Exercise 07: Configure a static network route on R4 destined to R1's e1/0 interface
 
+~~~
 !@R4
 conf t
  ip route 10.1.1.__ 255.255.255.252 10.1.1.__
  end
+~~~
 
 
-Ans
+<details>
+<summary>Show Answer</summary>
 
+~~~
 !@R4
 conf t
  ip route 10.1.1.0 255.255.255.252 10.1.1.9
  end
- 
- 
- 
+~~~
 
+</details>
+ 
+<br>
+<br>
 
-3. The next-hop device must also know how to route the packet
-
+The next-hop device must also know how to route the packet
 Tip: R2 cannot reach R1; R4 cannot reach 
 
-ans
 
+<details>
+<summary>Show Answer</summary>
+	
+~~~
 !@R2
 conf t
  ip route 10.1.1.8 255.255.255.252 10.1.1.6
  end
- 
- 
- 
+~~~
+
+</details>
+
+<br>
+
 R4 & R1 can now ping, but that doesn't mean they can ping the network of R3 & R2.
- 
+
+~~~
 !@R4
 conf t
  ip route 10.1.1.4 255.255.255.252 10.1.1.9
  end
+~~~
 
+<br>
+<br>
 
-How devices forward Packets.
+---
+&nbsp;
+
+How devices forward IP Packets.
 Packet Forwarding Process:
 
 Source IP, Destination IP
