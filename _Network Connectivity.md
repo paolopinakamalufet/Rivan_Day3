@@ -361,6 +361,24 @@ Place PCs (__P1__, __P2__) on __VLAN 10__
 <br>
 <br>
 <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 <details>
 <summary>Show Answer</summary>
@@ -392,6 +410,24 @@ conf t
 ### DHCP Clients
 Make P1 & P2 a DHCP client.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 <br>
 <br>
