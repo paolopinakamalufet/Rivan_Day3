@@ -275,18 +275,18 @@ A routing table is a database, also known as a FIB (Forwarding Information Base)
 ---
 &nbsp;
 
-## Master Routing using `Route Switch TShoot Hayup Lab`
+## Master Routing using RIVAN RSTHAYUP LAB
 ~~~
 Login: root
 Pass: C1sc0123
+
+Lab: RSTvX
 
 Devices
 Secret: pass
 ~~~
 
-&nbsp;
----
-&nbsp;
+<br>
 
 ![RST_IPv4](img/rstIPv4.png)
 
@@ -386,6 +386,12 @@ conf t
 <br>
 <br>
 
+&nbsp;
+---
+&nbsp;
+
+### ANSWER
+
 <details>
 <summary>Show Answer</summary>
   
@@ -453,6 +459,12 @@ conf t
 <br>
 <br>
 
+&nbsp;
+---
+&nbsp;
+
+### ANSWER
+
 <details>
 <summary>Show Answer</summary>
 
@@ -503,43 +515,44 @@ Verify connectivity through the following:
 - Make sure __S1__ is able to ping __D1__, __D2__, __A1__, & __A2__ on __VLAN 100__
 - Make sure __S2__ is able to ping __D1__ & __D2__ on __VLAN 20__
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+~~~
+!@S1
+conf t
+
+
+
+  end
+
+
+!@D1
+conf t
+
+
+
+  end
+
+
+!@S2
+conf t
+
+
+
+  end
+
+
+!@D2
+conf t
+ 
+
+
+  end
+~~~
+
+&nbsp;
+---
+&nbsp;
+
+### ANSWER
 
 <details>
 <summary>Show Answer</summary>
@@ -588,8 +601,10 @@ conf t
 ---
 &nbsp;
 
-## Static & Default Routing
+## 🔀 Static & Default Routing
 *What is the normal behavior for network connectivity?*
+
+<br>
 
 ~~~
 !@R1
@@ -598,8 +613,7 @@ vs
 ping 10.1.1.5
 ~~~
 
-Is the result normal?
-
+Is the result normal? 
 
 <br>
 
@@ -610,6 +624,8 @@ Syntax:
 <br>
 
 What is a next-hop?
+
+<br>
 
 ~~~
 !@cmd
@@ -625,6 +641,8 @@ Tracing route to 8.8.8.8 over a maximum of 30 hops
   7     8 ms     5 ms     7 ms  142.250.58.243
   8     6 ms    10 ms    10 ms  8.8.8.8
 ~~~
+
+<br>
 
 Next-hop = 
 
@@ -644,8 +662,7 @@ ping 10.1.1.5
 ---
 &nbsp;
 
-
-### 🎯 Exercise 04: Configure a static route on R2 destined for R3's e1/2 interface.
+### 🎯 Exercise 03: Configure a static route on R2 destined for R3's e1/2 interface.
 ~~~
 !@R2
 conf t
@@ -657,14 +674,12 @@ conf t
 <br>
 <br>
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+
+&nbsp;
+---
+&nbsp;
+
+### ANSWER
 
 <details>
 <summary>Show Answer</summary>
@@ -684,14 +699,24 @@ conf t
 ---
 &nbsp;
 
-### 🎯 Exercise 05: Configure a static route on R1 destined for R3's e1/1 interface.
-
+### 🎯 Exercise 04: Configure a static route on R1 destined for R3's e1/1 interface.
 ~~~
 !@R1
 conf t
  ip route __.__.__.__  __.__.__.__  __.__.__.__
  end
 ~~~
+
+<br>
+<br>
+<br>
+<br>
+
+&nbsp;
+---
+&nbsp;
+
+### ANSWER
 
 <details>
 <summary>Show Answer</summary>
@@ -702,6 +727,8 @@ conf t
  ip route 10.1.1.6 255.255.255.255 10.1.1.2
  end
 ~~~
+
+<br>
 
 __Routing must be two way__
 
@@ -722,13 +749,21 @@ conf t
 
 ### Host Route vs Network Route
 
-### 🎯 Exercise 06: Review. Find the network of the following IP addresses:
+### 🎯 Exercise 05: Review. Find the network of the following IP addresses:
 | Network          | Host IP           |
 | ---              | ---               |
 |                  | 10.1.100.79 /18   |
 |                  | 172.16.145.18 /20 |
 |                  | 192.168.1.205 /30 | 
 
+<br>
+<br>
+
+&nbsp;
+---
+&nbsp;
+
+### ANSWER
 
 <details>
 <summary>Show Answer</summary>
@@ -746,10 +781,14 @@ conf t
 
 __Configure a Network route on R3 destined for R1 & R2's connected network.__
 
+<br>
+
 ~~~
 !@R3
 show ip route static
 ~~~
+
+<br>
 
 Check the Network Mask of an interface: 3 ways
 ~~~
@@ -768,11 +807,13 @@ conf t
 show ip route static
 ~~~
 
-&nbsp;
+<br>
+<br>
+
 ---
 &nbsp;
 
-Make R1 ping R4
+__Configure R1 to be able to reach R4__
 
 ~~~
 !@R1
@@ -781,12 +822,15 @@ conf t
  end 
 ~~~
 
+<br>
 
 Verify:
 ~~~
 !@R1
 ping 10.1.1.9
+
 vs
+
 ping 10.1.1.10
 ~~~
 
@@ -797,7 +841,6 @@ ping 10.1.1.10
 &nbsp;
 
 ### 🎯 Exercise 07: Configure a static network route on R4 destined to R1's e1/0 interface
-
 ~~~
 !@R4
 conf t
@@ -805,6 +848,14 @@ conf t
  end
 ~~~
 
+<br>
+<br>
+
+&nbsp;
+---
+&nbsp;
+
+### ANSWER
 
 <details>
 <summary>Show Answer</summary>
@@ -815,18 +866,11 @@ conf t
  ip route 10.1.1.0 255.255.255.252 10.1.1.9
  end
 ~~~
-
-</details>
  
 <br>
 <br>
 
 The next-hop device must also know how to route the packet
-Tip: R2 cannot reach R1; R4 cannot reach 
-
-
-<details>
-<summary>Show Answer</summary>
 	
 ~~~
 !@R2
@@ -835,8 +879,7 @@ conf t
  end
 ~~~
 
-</details>
-
+<br>
 <br>
 
 R4 & R1 can now ping, but that doesn't mean they can ping the network of R3 & R2.
@@ -848,13 +891,15 @@ conf t
  end
 ~~~
 
+</details>
+
 <br>
 <br>
 
 ---
 &nbsp;
 
-How devices forward IP Packets.
+## How devices forward IP Packets.
 Packet Forwarding Process:
 
 Source IP, Destination IP
