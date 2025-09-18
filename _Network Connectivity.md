@@ -1784,13 +1784,13 @@ show ip ospf database network
 &nbsp;
 
 ### OSPF States
-D: __Down__ - The initial state where no hello packets have been received from a neighbor
-I: __Init__ - A hello packet has been received from a neighbor, but that neighbor's Router ID was not included in the hello packet, indicating a lack of bidirectional communication yet
-T: __Two-way__ - Bidirectional communication is established, as both routers have received each other's Router IDs in hello packets. DR/BDR Election occurs.
-E: __Exstart__ - Routers determine who will be the master and who will be the slave for the upcoming database exchange. The router with the higher Router ID becomes the master and begins the exchange of Database Description (DBD) packets, synchronizing sequence numbers. 
-E: __Exchange__ - Routers exchange DBD packets to describe their Link State Databases (LSDBs). They compare the contents and identify any missing link-state information
-L: __Loading__ - Routers request the missing link-state information by sending Link-State Requests (LSRs). They then receive Link-State Updates (LSUs) and acknowledge them with Link-State Acknowledgements (LSAs)
-F: __Full__ - the LSDBs are fully synchronized and identical between the adjacent routers. The routers have all the necessary information to form a complete network map and are ready to share routing data
+D: __Down__ - The initial state where no hello packets have been received from a neighbor  
+I: __Init__ - A hello packet has been received from a neighbor, but that neighbor's Router ID was not included in the hello packet, indicating a lack of bidirectional communication  
+T: __Two-way__ - Bidirectional communication is established, as both routers have received each other's Router IDs in hello packets. DR/BDR Election occurs.  
+E: __Exstart__ - Routers determine who will be the master and who will be the slave for the upcoming database exchange. The router with the higher Router ID becomes the master and begins the exchange of Database Description (DBD) packets, synchronizing sequence numbers.  
+E: __Exchange__ - Routers exchange DBD packets to describe their Link State Databases (LSDBs). They compare the contents and identify any missing link-state information  
+L: __Loading__ - Routers request the missing link-state information by sending Link-State Requests (LSRs). They then receive Link-State Updates (LSUs) and acknowledge them with Link-State Acknowledgements (LSAs)  
+F: __Full__ - the LSDBs are fully synchronized and identical between the adjacent routers. The routers have all the necessary information to form a complete network map and are ready to share routing data  
 
 <br>
 
@@ -2006,21 +2006,6 @@ conf t
 ---
 &nbsp;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### OSPF & EIGRP Redistribution
 ~~~
 !@R4
@@ -2102,7 +2087,7 @@ conf t
 &nbsp;
 
 ### Route Summarization
-
+~~~
 !@R2
 conf t
  int lo8
@@ -2140,80 +2125,190 @@ conf t
   passive-interface lo35
   passive-interface lo36
   end
+~~~
 
+<br>
 
+Steps to summarize routes for OSPF
+1. Determine the octet in which the Networks increment.
+10.10.8.0
+10.10.9.0
+10.10.10.0
+10.10.11.0
 
-Summarize
+= 3rd Octet
 
-1. Determine the range between the first and last addresses to be summarized
+<br>
 
-.8.1
-.9.1
-.10.1
-.11.1
+2. From the specified octet, find the difference between the first network (8) and the last (11).
+11 - 8 = 3
 
-8 - 11 = 3 
+<br>
 
-2. From the total range determine the next closes i.
-
+3. Based on the difference (3), determine the next closes i.
 The closest to 3 is 4i
 
-10.10.8.0/30
+<br>
 
+4. Determine the new slash based on the chosen i (4i) and the octet (3rd) where the networks increments.
+(3rd Octet, 4i) = /22
 
+<br>
+
+5. Finally, apply the new CIDR (/22) to the lowest network (10.10.8.0). Then, find the network.
+= 10.10.8.0/22
+
+<br>
+
+~~~
 !@R2
 conf t
  router ospf 1
   area 12 range 10.10.8.0 255.255.252.0
   end
+~~~
 
+<br>
+<br>
 
+---
+&nbsp;
 
-Exercise 14: Summarize routes from loopback 33 - loopback 36
+### 🎯 Excercise 15: Summarize routes from loopback 33 - loopback 36
+~~~
+!@R2
+conf t
+ router ospf __
+  area __ range __.__.__.__  __.__.__.__
+  end
+~~~
 
+<br>
+<br>
+
+&nbsp;
+---
+&nbsp;
+
+### ANSWER
+
+<details>
+<summary>Show Answer</summary>
+	
+~~~
 !@R2
 conf t
  router ospf 1
   area 12 range 10.10.32.0 255.255.252.0 
   end
+~~~
 
+</details>
+
+<br>
 
 Remove All summarizations
-
+~~~
 !@R2
 conf t
  router ospf 1
   no area 12 range 10.10.8.0 255.255.252.0
   no area 12 range 10.10.32.0 255.255.252.0
   end
+~~~
 
+<br>
+<br>
 
-Exercise 15: Summarize both summarized routes
+---
+&nbsp;
 
-.8
-.9
-.10
-.11
-.33
-.34
-.35
-.36
+### 🎯 Excercise 16: Summarize both summarized routes
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<br>
+<br>
+
+&nbsp;
+---
+&nbsp;
+
+### ANSWER
+
+<details>
+<summary>Show Answer</summary>
+	
+~~~
 !@R2
 conf t
  router ospf 1
   area 12 range 10.10.0.0 255.255.192.0
   end
+~~~
 
+</details>
+
+<br>
+<br>
+
+~~~
 !@R4
 show ip ospf database
+~~~
 
-
-
-
-
+<br>
+<br>
 
 ---
+&nbsp;
+
+
+
+
+
+
+
+
+
+
+
 
 Hurrican AS Number
 - Globe
