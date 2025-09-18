@@ -1378,9 +1378,14 @@ show ip eigrp topology
 ~~~
 
 <br>
+<br>
 
 ### EIGRP Metric
 *EIGRP Metric Formula*
+
+<br>
+
+![RST_IPv4](img/EIGRP_only.png)
 
 <br>
 
@@ -1391,15 +1396,20 @@ __EIGRP Path Selection:__
 | D1     |     |     |             |
 | D2     |     |     |             |
 
+<br>
 
-Reported Distance (__RD__) 
-Feasible Distance (__FD__)
+1. Reported Distance (__RD__)  
+2. Feasible Distance (__FD__)  
+3. Successor (Primary : Lowest Cost)  
+4. Feasible Successor (Backup)  
 
-Successor (Primary : Lowest Cost)
-Feasible Successor (Backup)
+<br>
 
-Feasability Condition - An EIGRP route is a feasible successor route if the RD from the neighbor is less than the FD of the successor route.
+__Feasability Condition__ - An EIGRP route is a feasible successor route if the RD from the neighbor is less than the FD of the successor route.
 
+&nbsp;
+---
+&nbsp;
 
 ### EIGRP Loadbalancing Unequal Cost Paths - Variance
 ~~~
@@ -1428,16 +1438,23 @@ conf t
     end
 ~~~
 
-Review
+<br>
+<br>
 
-Path selection rules:
-1. Longest Prefix
-2. Administrative Distance
-3. Metric Cost
+---
+&nbsp;
 
+### Review
 
-Exam Question: When the following command was entered on R4, why did the route to 10.2.1.0 changed from D - S
+Path Selection Process
+1. &nbsp;
+2. &nbsp;
+3. &nbsp;
 
+<br>
+
+### Exam Question: When the following command was entered on R4, why did the route to 10.2.1.0 changed from D to S
+~~~
 !@R4
 terminal length 0
 show ip route
@@ -1446,7 +1463,7 @@ conf t
  ip route 10.2.1.0 255.255.255.0 10.1.4.6
  end
 show ip route
-
+~~~
 
 
 
