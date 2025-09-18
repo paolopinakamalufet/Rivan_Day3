@@ -933,7 +933,7 @@ conf t
 route print
 ~~~
 
-Administrative Distance - Trustworthiness & Reliability of a Route Source
+__Administrative Distance__ - Trustworthiness & Reliability of a Route Source
 
 | AD Value | Trust Value               |
 | ---      | ---                       |
@@ -1015,68 +1015,64 @@ conf t
 
 </details>
 
+<br>
+<br>
 
 ---
+&nbsp;
 
-Path Selection Rules
+## Path Selection Process : Longest Prefix Match
+1. __Longest Prefix Match (LPM)__  
+2. &nbsp;
+3. &nbsp;
 
-1. Longest Prefix Rule
-2. 
-3. 
+<br>
 
-
-!@P1
-ping 10.2.1.1
-
-vs
-
-!@P1
-ping 192.168.1.129
-ping 192.168.1.130
-
-
-
-Routing Policies, configure routing with the least hop count possible.
-
+~~~
 !@P1
 conf t
  ip route 192.168.1.128 255.255.255.224 10.2.1.1
  end
- 
+ping 192.168.1.129
+~~~
+
+<br>
+
+__Routing Policies__, configure routing with the __least hop count possible__.
+
+<br>
+
 Verify:
 
+~~~
 !@P1
 traceroute 192.168.1.129
 traceroute 192.168.1.130
 traceroute 192.168.1.131
 traceroute 192.168.1.132
+~~~
 
+<br>
 
 Why does P1 need to take 2 hop counts to reach D2's VLAN 100?
 
-Configure a host static route that takes advantage of the longest prefix rule to allow P1 to go directly to D2 instead of D1.
+<br>
 
+Configure a host static route that takes advantage of the longest prefix rule to allow P1 to go directly to D2 instead of D1.
+~~~
 !@P1
 conf t
  ip route 192.168.1.130 255.255.255.255 10.2.1.2
  end
-traceroute 192.168.1.130
+~~~
 
+<br>
 
 Verify:
-
+~~~
 !@P1
 show ip route static
- 
-Why longest prefix?
 
-1 1 1 1  1 1 1 1    1 1 1 1  1 1 1 1    1 1 1 1  1 1 1 1    1 1 1 0  0 0 0 0 = /27
-1 1 1 1  1 1 1 1    1 1 1 1  1 1 1 1    1 1 1 1  1 1 1 1    1 1 1 1  1 1 1 1 = /32
-
-
-Verify:
-
-!@P1
 traceroute 192.168.1.129
 traceroute 192.168.1.131
 traceroute 192.168.1.132
@@ -1084,12 +1080,28 @@ traceroute 192.168.1.132
 vs
 
 traceroute 192.168.1.130
+~~~
 
+<br>
 
+Why longest prefix?
 
-Exam Question
+<br>
 
-Which Route will P1 use to reach 192.168.1.130 ?
+<details>
+<summary>Why longest prefix?</summary>
+
+### `1 1 1 1   1 1 1 1   .   1 1 1 1   1 1 1 1   .   1 1 1 1   1 1 1 1   .   1 1 1 0   0 0 0 0` = /27
+### `1 1 1 1   1 1 1 1   .   1 1 1 1   1 1 1 1   .   1 1 1 1   1 1 1 1   .   1 1 1 1   1 1 1 1` = /32
+
+</details>
+
+&nbsp;
+---
+&nbsp;
+
+### Exam Question: Which Route will P1 use to reach 192.168.1.130 ?
+~~~
 S*    0.0.0.0/0 [254/0] via 10.2.1.254
       10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
 
@@ -1101,63 +1113,129 @@ L        10.2.1.101/32 is directly connected, Ethernet0/0
 S        192.168.1.128/27 [1/0] via 10.2.1.1
 
 S        192.168.1.130/32 [1/0] via 10.2.1.2
+~~~
+
+<br>
+<br>
 
 ---
+&nbsp;
 
-Exercise 09: Configure static routes on P2, destine for VLAN 100 with the least hop counts possible to D1, D2, A1, and A2.
+### 🎯 Exercise 09: Configure static routes on P2, destined for VLAN 100 with the least hop counts possible to D1, D2, A1, and A2.
 
+~~~
 !@P2
 conf t
  ip route 192.168.1.__  __.__.__.__  __.__.__.__
  ip route 192.168.1.__  __.__.__.__  __.__.__.__
  end
+~~~
 
-Ans
+<br>
+<br>
 
+&nbsp;
+---
+&nbsp;
+
+### ANSWER
+
+<details>
+<summary>Show Answer</summary>
+
+~~~
 !@P2
 conf t
  ip route 192.168.1.128 255.255.255.224 10.2.1.2
  ip route 192.168.1.129 255.255.255.255 10.2.1.1
  end
+~~~
 
+</details>
 
-
-
-
----
-
-
-Excercise 10: Configure static routes to allow P1 to ping Google (8.8.8.8)
-
-
-
+<br>
+<br>
 
 ---
+&nbsp;
 
-The need for Dynamc routing protocols
+### 🎯 Excercise 10: Configure static routes to allow P1 to ping Google (8.8.8.8)
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-IGP - Interior Gateway Protocols
-- Link-state = OSPF & ISIS
-- Distance Vector = EIGRP & RIP
-
-EGP - Exterior Gateway Protocols
-- BGP = Border Gateway Protocol
+<br>
+<br>
 
 ---
+&nbsp;
 
+## 🔀 Dynamic Routing
+1. IGP (Interior Gateway Protocol)
+  - Link-state - __OSPF__ & __ISIS__
+  - Distance Vector - __EIGRP__ & __RIP__
+
+2. EGP (Exterior Gateway Protocol)
+  - __BGP__ (Border Gateway Protocol)
+
+<br>
+<br>
+
+~~~
 !@D1,D2,R4
 show version
+~~~
 
-If all Cisco, use EIGRP
+<br>
+
+If all Cisco, use __EIGRP__
+
+&nbsp;
+---
+&nbsp;
 
 
-EIGRP
-Advertise Connected Routes
+## 🔀 EIGRP
+Steps in configuring EIGRP
+1. Decide on an ASN
+2. Determine Connected Networks
+3. Advertise
 
-Step 1: Decide on an ASN
-Step 2: Determine Connected Networks
-Step 3: Advertise
-
+~~~
 !@R4
 conf t
  router eigrp 100
@@ -1165,7 +1243,9 @@ conf t
   network 10.1.4.8 0.0.0.3
   network 10.1.4.4 0.0.0.3
   end
-  
+~~~
+
+~~~
 !@D1
 config t
  router eigrp 100
@@ -1175,10 +1255,16 @@ config t
   network 10.2.2.0 0.0.0.255
   network 192.168.1.128 0.0.0.31
 end
+~~~
 
+<br>
+<br>
 
-Exercise 11: Configure EIGRP on D2. Advertise all connected routes.
+---
+&nbsp;
 
+### 🎯 Excercise 11: Configure EIGRP on D2. Advertise all connected routes.
+~~~
 !@D2
 config t
  router ____  ____
@@ -1188,10 +1274,21 @@ config t
   network __.__.__.__  __.__.__.__
   network __.__.__.__  __.__.__.__
   end
+~~~
 
+<br>
+<br>
 
-Ans
+&nbsp;
+---
+&nbsp;
 
+### ANSWER
+
+<details>
+<summary>Show Answer</summary>
+
+~~~
 !@D2
 conf t
  router eigrp 100
@@ -1201,14 +1298,15 @@ conf t
   network 10.2.2.0 0.0.0.255
   network 192.168.1.128 0.0.0.31
   end
+~~~
 
----
+</details>
 
-OPTIONAL
-
-Named EIGRP / Multi Address-Family EIGRP
+### OPTIONAL
+### Named EIGRP / Multi Address-Family EIGRP
 When you are using NEXUS, address family is required.
 
+~~~
 !@R4
 conf t
  router eigrp CCNPLEVEL
@@ -1216,7 +1314,9 @@ conf t
    network 10.1.4.8 0.0.0.3
    network 10.1.4.4 0.0.0.3
    end
-   
+~~~
+
+~~~
 !@D1
 conf t
  router eigrp CCNPLEVEL
@@ -1226,7 +1326,9 @@ conf t
    network 10.2.2.0 0.0.0.255
    network 192.168.1.128 0.0.0.31
    end
-  
+~~~
+
+~~~
 !@D2
 conf t
  router eigrp CCNPLEVEL
@@ -1236,8 +1338,11 @@ conf t
    network 10.2.2.0 0.0.0.255
    network 192.168.1.128 0.0.0.31
    end
+~~~
 
+&nbsp;
 ---
+&nbsp;
 
 Data Structure
 1. show ip eigrp neighbors : Neighbor Table
