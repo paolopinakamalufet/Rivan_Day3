@@ -1465,29 +1465,38 @@ conf t
 show ip route
 ~~~
 
-
-
-
+<br>
+<br>
 
 ---
+&nbsp;
 
-What device do you need to filter data entering your network?
-Firewall
+## 🔀 OSPF
+*What device do you need to filter data entering your network? Firewall*
+
+<br>
 
 Which is the best firewall?
-Palo Alto
-Fortinet
-Juniper
-Cisco Firepower
+1. Palo Alto
+2. Fortinet
+3. Juniper
+4. Cisco Firepower
 
-What Routing protocol to use if Multi-Vendor? OSPF
+<br>
 
----
+What Routing protocol to use if __Multi-Vendor__? __OSPF__
 
-OSPF (Single Area OSPF)
+<br>
+<br>
 
-Advertise Connected Routes
+### Single Area OSPF
+Advertise Connected Routes:
+~~~
+!@R3
+show ip route | inc C
+~~~
 
+~~~
 !@R3
 conf t
  router ospf 1
@@ -1496,6 +1505,7 @@ conf t
   network 10.1.1.8 0.0.0.3 area 0
   network 10.1.1.4 0.0.0.3 area 0
   end
+~~~
 
 
 Exercise 12: Configure OSPF on R4 with the following settings:
