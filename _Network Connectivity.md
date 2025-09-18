@@ -1622,94 +1622,55 @@ conf t
   end
 ~~~
 
-
-
-
+&nbsp;
 ---
+&nbsp;
 
-Data Structure
-1. show ip ospf neighbors : Neighbor Table
-2. show ip ospf interface brief : Interface Table
-3. show ip ospf topology-info : Topology Table
+### OSPF Database
+1. __`show ip ospf neighbors`__ : Neighbor Table
+2. __`show ip ospf interface brief`__ : Interface Table
+3. __`show ip ospf topology-info`__ : Topology Table
 
-Verify:
-
-show ip protocols
-show ip ospf neighbors
-show ip ospf interface brief
-show ip ospf topology-info 
-show ip route ospf
-
-
-
-OSPF Network Types and Priorities.
-
-Exercise 13: Ensure R3 is the DR for all its connected networks by completing the following tasks:
-- Eliminate the need for a DR/BDR election between R4 & R3
-- Configure R1 to be ineligible to become a DR/BDR
-- Configure R2 with the highest priority on its e1/2 interface.
-
-!@R4
-conf t
- int e1/2
-  ip ospf network point-to-point
-  end
-
-
-!@R3
-conf t
- int e1/2
-  ip ospf network point-to-point
-  end
-  
-
-!@R2
-conf t
- int e1/2
-  ip ospf priority 255
-  end
-  
-
-!@R1
-conf t
- int e1/0
-  ip ospf priority 0
-  end
-
-
-Verify:
-
-!@R4,R3,R2,R1
-show ip ospf neighbor
-
+&nbsp;
 ---
+&nbsp;
 
-What makes a dynamic routing protocol?
+__What makes a dynamic routing protocol?__
 
+~~~
 !@R4
 conf t
  int lo4
   shut
   end
+~~~
 
+~~~
 !@R1
 show ip route ospf
 show ip ospf route
+~~~
 
+<br>
 
 Bring back Loopback 4.4.4.4
 
+<br>
+
+~~~
 !@R4
 conf t
  int lo4
   no shut
   end
+~~~
 
+&nbsp;
+---
+&nbsp;
 
---
-
-Capture Hello Packets:
-
+### Capture Hello Packets
+~~~
 !@R4
 conf t
  int e3/3
@@ -1720,9 +1681,58 @@ conf t
  router eigrp 100
   network 208.8.8.0 0.0.0.255
   end
+~~~
 
+<br>
 
-Contents of an OSPF Hello Packet
+__WireShark__ - Capture Packets from __VMNet8__ & filter __OSPF__  
+
+<br>
+
+## Job Interview Question.
+### What are the contents of an OSPF Hello Packet?
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<details>
+<summary>Show Answer</summary>
+	
 - Router ID/Source OSPF Router
 - Area ID
 - Subnet Mask
@@ -1733,22 +1743,26 @@ Contents of an OSPF Hello Packet
 - Designated Router
 - Backup Designated Router
 
+</details>
+
+&nbsp;
 ---
+&nbsp;
 
-What makes OSPF Link-State?
- 
-It builds a topology of the network.
+### Link-State Routing Protocol
+__LSU__ - Link-State Updates  
+__LSA__ - Link-State Advertisement  
 
-LSU - Link-State Updates
-  V
-LSA - Link-State Advertisement
+<br>
 
-Type 1 LSA - (O) Router LSA : Router info
-Type 2 LSA - (O) Network LSA : via DR/BDR Network Routes
-Type 3 LSA - (O IA) Summary LSA
-Type 5 LSA - (O E2) AS-External LSA
+- Type 1 LSA - (__O__) Router LSA : Router info
+- Type 2 LSA - (__O__) Network LSA : via DR/BDR Network Routes
+- Type 3 LSA - (__O IA__) Summary LSA
+- Type 5 LSA - (__O E2__) AS-External LSA
 
+<br>
 
+~~~
 !@EDGE
 conf t
  int lo#$34T#
@@ -1757,44 +1771,108 @@ conf t
   end
 clear ip ospf process
 yes
+~~~
 
+~~~
 !@R3
 show ip ospf database
 show ip ospf database network
+~~~
 
-
+&nbsp;
 ---
+&nbsp;
 
-OSPF States
+### OSPF States
+D: __Down__ - The initial state where no hello packets have been received from a neighbor
+I: __Init__ - A hello packet has been received from a neighbor, but that neighbor's Router ID was not included in the hello packet, indicating a lack of bidirectional communication yet
+T: __Two-way__ - Bidirectional communication is established, as both routers have received each other's Router IDs in hello packets. DR/BDR Election occurs.
+E: __Exstart__ - Routers determine who will be the master and who will be the slave for the upcoming database exchange. The router with the higher Router ID becomes the master and begins the exchange of Database Description (DBD) packets, synchronizing sequence numbers. 
+E: __Exchange__ - Routers exchange DBD packets to describe their Link State Databases (LSDBs). They compare the contents and identify any missing link-state information
+L: __Loading__ - Routers request the missing link-state information by sending Link-State Requests (LSRs). They then receive Link-State Updates (LSUs) and acknowledge them with Link-State Acknowledgements (LSAs)
+F: __Full__ - the LSDBs are fully synchronized and identical between the adjacent routers. The routers have all the necessary information to form a complete network map and are ready to share routing data
 
-D - Down - The initial state where no hello packets have been received from a neighbor
-I - Init - A hello packet has been received from a neighbor, but that neighbor's Router ID was not included in the hello packet, indicating a lack of bidirectional communication yet
-T - Two-way - Bidirectional communication is established, as both routers have received each other's Router IDs in hello packets. DR/BDR Election occurs.
-E - Exstart - Routers determine who will be the master and who will be the slave for the upcoming database exchange. The router with the higher Router ID becomes the master and begins the exchange of Database Description (DBD) packets, synchronizing sequence numbers. 
-E - Exchange - Routers exchange DBD packets to describe their Link State Databases (LSDBs). They compare the contents and identify any missing link-state information
-L - Loading - Routers request the missing link-state information by sending Link-State Requests (LSRs). They then receive Link-State Updates (LSUs) and acknowledge them with Link-State Acknowledgements (LSAs)
-F - Full - the LSDBs are fully synchronized and identical between the adjacent routers. The routers have all the necessary information to form a complete network map and are ready to share routing data
+<br>
 
 Attempt to view OSPF States
 
+~~~
 !@R2 & R1
 clear ip ospf process
 yes
 show ip ospf neighbor
+~~~
+
+<br>
+<br>
 
 ---
+&nbsp;
 
-Neighborship vs Adjacency
+### OSPF Network Types and Priorities.
+### 🎯 Excercise 14: Ensure R3 is the DR for all its connected networks by completing the following tasks:
+- Eliminate the need for a DR/BDR election between R4 & R3
+- Configure R1 to be ineligible to become a DR/BDR
+- Configure R2 with the highest priority on its e1/2 interface.
+
+~~~
+!@R4
+conf t
+ int e1/2
+  ip ospf network point-to-point
+  end
+~~~
+
+~~~
+!@R3
+conf t
+ int e1/2
+  ip ospf network point-to-point
+  end
+~~~
+
+~~~
+!@R2
+conf t
+ int e1/2
+  ip ospf priority 255
+  end
+~~~
+
+~~~
+!@R1
+conf t
+ int e1/0
+  ip ospf priority 0
+  end
+~~~
+
+<br>
+
+Verify:
+~~~
+!@R4,R3,R2,R1
+show ip ospf neighbor
+~~~
+
+<br>
+<br>
+
+---
+&nbsp;
+
+### Neighborship vs Adjacency
 - Same Area
 - Same Subnet Mask/Network
 - Same Network Type
 - Same Hello Interval
 - Same Dead Interval
 
+<br>
 
-Practice Doing the wrong things
-Mismatched Network Type
+1. __Mismatched Network Type__
 
+~~~
 !@R3
 conf t
  int e1/2
@@ -1803,21 +1881,28 @@ conf t
 show ip ospf neighbor
 clear ip ospf process
 yes
+~~~
 
+~~~
 !@R4
 show ip route ospf
+~~~
 
----
-
+~~~
 !@R3 & R4
 show ip ospf int e1/2
+~~~
+
+<br>
 
 Determine the issue why R3 & R4 fail to form an adjacency:
 
-
+<br>
+<br>
 
 Fix the adjacency:
 
+~~~
 !@R3
 conf t
  int e1/2
@@ -1826,15 +1911,14 @@ conf t
 show ip ospf neighbor
 clear ip ospf process
 yes
- 
+~~~
 
-
-
+&nbsp;
 ---
+&nbsp;
 
-Mismatched Hello & Dead Timers
-
-Remove the Adjacency of R2 & R1
+2. __Mismatched Hello & Dead Timers__
+~~~
 !@R2
 conf t
  int e1/2
@@ -1844,22 +1928,27 @@ conf t
 show ip ospf neighbor
 clear ip ospf process
 yes
+~~~
 
-
----
-
+~~~
 !@R2
 show ip ospf int e1/2
+~~~
 
+~~~
 !@R1
 show ip ospf int e1/0
+~~~
 
+<br>
 
 Determine the issue why R2 & R1 fail to form an adjacency:
 
+<br>
+<br>
 
 Fix the adjacency:
-
+~~~
 !@R2
 conf t
  int e1/2
@@ -1868,43 +1957,72 @@ conf t
   end
 show ip ospf neighbor
 clear ip ospf process
+~~~
 
+<br>
+<br>
 
 ---
+&nbsp;
 
-Optimize OSPF Network
-Set loop back IPs Passive interface
+### OSPF Passive-Interface
+Configure loopback interfaces to not send hello packets
 
+~~~
 !@R1
 conf t
  router ospf 1
   passive-interface lo1
   end
+~~~
 
+~~~
 !@R2
 conf t
  router ospf 1
   passive-interface lo2
   end
+~~~
 
+~~~
 !@R3
 conf t
  router ospf 1
   passive-interface lo3
   end
- 
+~~~
+
+~~~
 !@R4
 conf t
  router ospf 1
   passive-interface lo4
   end
+~~~
 
-
+<br>
+<br>
 
 ---
+&nbsp;
 
-OSPF & EIGRP Redistribution
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### OSPF & EIGRP Redistribution
+~~~
 !@R4
 config T
  router eigrp 100
@@ -1913,47 +2031,15 @@ config T
  router ospf 1
   redistribute eigrp 100 subnets
 end
+~~~
 
+<br>
 
-Review:
+or
 
-Path Selection Rule 1: 
-Path Selection Rule 2:
-Path Selection Rule 3:
+<br>
 
-!@R4, D1, R3
-show ip route
-show ip ospf | inc band
-
-Administrative Distance
-
-C Connected AD:
-S Static AD:
-
-D EIGRP AD: 
-EIGRP Metric: 
-
-D EX AD:
-
-O OSPF AD: 
-OSPF Metric: 
-
-
-Interface Cost = Reference Bandwidth / Interface Bandwidth
-
-!@R1,R2,R3,R4
-conf t
- router ospf 1
-  auto-cost reference-bandwidth 100000
-  end
-
-
----
-OPTIONAL - REDISTRIBUTION via Named EIGRP
-
-Named EIGRP / Multi Address-Family EIGRP
-When you are using NEXUS, address family is required.
-
+~~~
 !@R4
 conf t
  router eigrp CCNPLEVEL
@@ -1966,11 +2052,56 @@ conf t
  router ospf 1
   redistribute eigrp 100 subnets
     end
-   
+~~~
+
+&nbsp;
 ---
+&nbsp;
 
+## Path Selection Process : Admin Distance & Metric Cost
+1. __Longest Prefix Match (LPM)__  
+2. __Administrative Distance__
+3. __Metric Cost__
 
-Route Summarization
+<br>
+
+| Legend | Routing Protocol | Administrative Distance | Metric |
+| ---    | ---              | ---                     | ---    |
+| C      | Connected        |                         |        |
+| S      | Static           |                         |        |
+| D      | EIGRP            |                         |        |
+| D EX   | External EIGRP   |                         |        |
+| O      | OSPF             |                         |        |
+| O E2   | External T5 OSPF |                         |        |
+
+!@R4, D1, R3
+show ip route
+
+<br>
+<br>
+
+### OSPF Metric Cost 
+Interface Cost = Reference Bandwidth / Interface Bandwidth
+~~~
+!@R3
+show ip ospf | inc band
+~~~
+
+~~~
+!@R1,R2,R3,R4
+conf t
+ router ospf 1
+  auto-cost reference-bandwidth 100000
+  end
+~~~
+
+<br>
+<br>
+
+---
+&nbsp;
+
+### Route Summarization
 
 !@R2
 conf t
