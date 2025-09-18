@@ -2059,8 +2059,10 @@ conf t
 | O      | OSPF             |                         |        |
 | O E2   | External T5 OSPF |                         |        |
 
+~~~
 !@R4, D1, R3
 show ip route
+~~~
 
 <br>
 <br>
@@ -2299,31 +2301,23 @@ show ip ospf database
 ---
 &nbsp;
 
-
-
-
-
-
-
-
-
-
-
-
+### BGP
 Hurrican AS Number
 - Globe
 - PLDT
 - Converge
 
+<br>
 
-BGP ASn Numbers
-R1 = ASN 1
-I1 & I4(GOOGLE DNS) = ASN 45
-I2 = ASN 2
-I3 = ASN 1
+R1 = ASN 1  
+I1 & I4(GOOGLE DNS) = ASN 45  
+I2 = ASN 2  
+I3 = ASN 1  
 
+<br>
+<br>
 
-
+~~~
 !@R1
 conf t
  router bgp 1
@@ -2339,7 +2333,9 @@ conf t
     network 208.8.8.0 mask 255.255.255.0
     network 209.9.9.0 mask 255.255.255.0
     end
+~~~
 
+~~~
 !@I1 - CONVERGE
 conf t
  router bgp 45
@@ -2356,12 +2352,19 @@ conf t
    network 44.44.44.44 mask 255.255.255.255
    network 45.4.5.0 mask 255.255.255.0
    end
+~~~
 
+<br>
+<br>
 
-Exercise 16: Configure BGP on I3 - Globe with the following:
+---
+&nbsp;
+
+### 🎯 Excercise 17: Configure BGP on I3 - Globe with the following:
 - Advertise all connected networks
 - Set the ASN number to ASN 3
 
+~~~
 !@I3 - GLOBE
 conf t
  router bgp __
@@ -2378,10 +2381,21 @@ conf t
    ______  __.__.__.__ mask __.__.__.__
    ______  __.__.__.__ mask __.__.__.__
    end
-   
+~~~
 
-Ans
+<br>
+<br>
 
+&nbsp;
+---
+&nbsp;
+
+### ANSWER
+
+<details>
+<summary>Show Answer</summary>
+
+~~~
 !@I3 - GLOBE
 conf t
  router bgp 3
@@ -2398,10 +2412,14 @@ conf t
    network 33.33.33.33 mask 255.255.255.255
    network 35.3.5.0 mask 255.255.255.0
    end
+~~~
 
+</details>
 
+<br>
+<br>
 
-
+~~~
 !@I4 - GOOGLE
 config t
  router bgp 45
@@ -2418,12 +2436,19 @@ config t
    network 25.2.5.0 mask 255.255.255.0
    network 35.3.5.0 mask 255.255.255.0
    network 45.4.5.0 mask 255.255.255.0
-end
+   end
+~~~
 
+<br>
+<br>
 
-Exercise 17: Configure BGP on I2(PLDT). Set the ASN number to 2.
+---
+&nbsp;
+
+### 🎯 Excercise 18: Configure BGP on I2(PLDT). Set the ASN number to 2.
 - Advertise the loopback IP
 
+~~~
 !@I2 - PLDT
 config t
  router bgp __
@@ -2443,9 +2468,21 @@ config t
   network __.__.__.__ mask __.__.__.__
   network __.__.__.__ mask __.__.__.__
   end
+~~~
 
-Ans
+<br>
+<br>
 
+&nbsp;
+---
+&nbsp;
+
+### ANSWER
+
+<details>
+<summary>Show Answer</summary>
+
+~~~
 !@I2 - PLDT
 config t
  router bgp 2
@@ -2465,56 +2502,76 @@ config t
   network 25.2.5.0 mask 255.255.255.0
   network 32.3.2.0 mask 255.255.255.0
   end
+~~~
 
+</details>
+
+<br>
+<br>
 
 Verify:
 
+~~~
+!@I2 - PLDT
 show bgp summary
+~~~
 
+<br>
+<br>
 
 ---
+&nbsp;
 
-BGP - OSPF Redistribution (Default Route Propagation)
-
+### BGP - OSPF Redistribution (Default Route Propagation)
+~~~
 !@R1
 conf t
  router ospf 1
   default-information originate always
   end
+~~~
 
-
+~~~
 !@R1
 show ip route
+~~~
 
+&nbsp;
+---
+&nbsp;
 
-Administrative Distance
+## Path Selection Process : Admin Distance & Metric Cost
+1. __Longest Prefix Match (LPM)__  
+2. __Administrative Distance__
+3. __Metric Cost__
 
-C Connected AD:
-S Static AD:
+<br>
 
-D EIGRP AD: 
-EIGRP Metric: 
+| Legend | Routing Protocol | Administrative Distance | Metric |
+| ---    | ---              | ---                     | ---    |
+| C      | Connected        |                         |        |
+| S      | Static           |                         |        |
+| D      | EIGRP            |                         |        |
+| D EX   | External EIGRP   |                         |        |
+| O      | OSPF             |                         |        |
+| O E2   | External T5 OSPF |                         |        |
+| B      | Internal BGP     |                         |        |
+| B      | External BGP     |                         |        |
 
-D EX AD:
+<br>
 
-O OSPF AD:
-OSPF Metric:
-
-B BGP Internal AD:
-B BGP External AD:
-BGP Metric: Multi-Exit Discriminator Attributes
-
-
-!@R1
+~~~
+!@R1, I1 - CONVERGE
 show ip route
+~~~
 
-
-
-
+<br>
+<br>
 
 ---
+&nbsp;
 
-NAT
+### NAT
 
 INSIDE GLOBAL     INSIDE LOCAL         OUTSIDE LOCAL      OUTSIDE GLOBAL
 
