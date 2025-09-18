@@ -1379,27 +1379,45 @@ show ip eigrp topology
 
 <br>
 
-EIGRP Path Selection:
-Reported Distance (RD) > Feasible Successor (Backup)
-Feasible Distance (FD) >  Successor (Lowest Cost)
-	Successor & Feasible successor (Backup)
-	Feasability Condition
-		An EIGRP route is a feasible successor route if the RD from the neighbor is less than the FD of the successor route.
+### EIGRP Metric
+*EIGRP Metric Formula*
 
-Advantage of EIGRP
-EIGRP Loadbalancing Unequal Cost Paths
+<br>
 
-Variance
+__EIGRP Path Selection:__
 
+| Device | RD  | FD  | Metric Path |
+| ---    | --- | --- | ---         |
+| D1     |     |     |             |
+| D2     |     |     |             |
+
+
+Reported Distance (__RD__) 
+Feasible Distance (__FD__)
+
+Successor (Primary : Lowest Cost)
+Feasible Successor (Backup)
+
+Feasability Condition - An EIGRP route is a feasible successor route if the RD from the neighbor is less than the FD of the successor route.
+
+
+### EIGRP Loadbalancing Unequal Cost Paths - Variance
+~~~
 !@R4
 conf t
  router eigrp 100
   variance 2
   traffic-share balanced
   end
+~~~
+
+<br>
 
 or 
 
+<br>
+
+~~~
 !@R4
 conf t
  router eigrp CCNPLEVEL
@@ -1408,7 +1426,7 @@ conf t
     variance 2
     traffic-share balanced
     end
-
+~~~
 
 Review
 
