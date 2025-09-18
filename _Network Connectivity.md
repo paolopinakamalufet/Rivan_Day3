@@ -2572,13 +2572,13 @@ show ip route
 &nbsp;
 
 ### NAT
-
+~~~
 INSIDE GLOBAL     INSIDE LOCAL         OUTSIDE LOCAL      OUTSIDE GLOBAL
-
-
+~~~
 
 Step 1: Define INSIDE and OUTSIDE
 
+~~~
 !@R1
 conf t
  int range e1/1-3
@@ -2587,20 +2587,27 @@ conf t
  int e1/0
   ip nat inside
   end
-  
+~~~
+
+<br>
+
 Step 2: Create an ACL to match traffic
 
+~~~
 !@R1
 conf t
  access-list 1 permit 10.0.0.0 0.255.255.255
  access-list 1 permit 172.16.0.0 0.15.255.255
  access-list 1 permit 192.168.0.0 0.0.255.255
  end
+~~~
+
+<br>
 
 Step 3: Configure desired NAT
 
-Static NAT or 1:1
-
+### Static NAT or 1:1
+~~~
 !@R1
 conf t
  ip nat inside source static 10.1.4.6 209.9.9.1 
@@ -2608,20 +2615,24 @@ conf t
  ip nat inside source static 10.1.1.10 209.9.9.3
  end
 show ip nat translations
+~~~
+
+<br>
 
 10.1.4.6 = D1
 10.1.1.2 = R2
 10.1.1.10 = R4
 
+~~~
 !@D1, R2, R4
 ping 8.8.8.8
-
+~~~
 
 Can all of them ping 8.8.8.8? If not, explain why.
 
-Fix
+<br>
 
-
+~~~
 !@R1
 clear ip nat translation *
 conf t
@@ -2629,6 +2640,7 @@ conf t
  ip nat inside source static 10.1.1.10 209.9.9.4
  end
 show ip nat translations
+~~~
 
 
 Exercise 18: Configure Static NAT to output the following:
