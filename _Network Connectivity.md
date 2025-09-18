@@ -619,7 +619,7 @@ Is the result normal?
 
 ### Static Routing Configuration
 Syntax:
-`ip route [Destination IP]  [Network/Host Mask]  [Interface / Nex-hop]`
+`ip route [Destination IP]  [Network/Host Mask]  [Exit Interface / Nex-hop]`
 
 <br>
 
@@ -899,89 +899,121 @@ conf t
 ---
 &nbsp;
 
-## How devices forward IP Packets.
-Packet Forwarding Process:
+### How devices forward IP Packets.
 
-Source IP, Destination IP
-
->
-
-Source IP, Destination IP
+![RST_IPv4](img/OSPF_only.png)
 
 
+<br>
+<br>
 
-Static route using interface instead of next-hop IP
+---
+&nbsp;
+
+### Static Route via Exit Interface
 
 Configure a static host route on R3, destined for R4's 10.1.4.9 IP using both a next-hop address and interface.
 
+~~~
 !@R3
 conf t
  ip route 10.1.4.9 255.255.255.255 e1/2 10.1.1.10
  end
+~~~
 
-
-
-
-
-
+<br>
+<br>
 
 ---
+&nbsp;
 
-Default Route
-
+## 🔀 Default Route & Floating Static Route
+~~~
 !@cmd
 route print
+~~~
 
+Administrative Distance - Trustworthiness & Reliability of a Route Source
 
-Floating static route
+| AD Value | Trust Value               |
+| ---      | ---                       |
+| 0        | Most Trusted              |
+| 1 - 254  | Lower Value, Higher Trust |
+| 255      | Untrusted, Discarded      |
 
+<br>
+
+~~~
 !@A1
 conf t
  ip route 0.0.0.0 0.0.0.0 192.168.1.129 1
  ip route 0.0.0.0 0.0.0.0 192.168.1.130 10
  end
+~~~
 
+<br>
 
-Verify:
-
+The Primary link went down:
+~~~
 !@A1
 show ip route static
 conf t
  no ip route 0.0.0.0 0.0.0.0 192.168.1.129 1
  end
 show ip route static
+~~~
 
+<br>
 
-Bring back the primary
-
+The Primary link has been fixed
+~~~
 !@A1
 conf t
  ip route 0.0.0.0 0.0.0.0 192.168.1.129 1
  end
 show ip route static
+~~~
 
+<br>
+<br>
 
+---
+&nbsp;
 
+### 🎯 Exercise 08: Configure default routes on A2 with the following settings:
+- __D2__ must be the __primary gateway__
+- __D1__ must be the __secondary gateway__
+- The __AD__ must have a difference of __10__
 
-Exercise 08: Configure default routes on A2 with the following settings:
-- D2 must be the primary gateway
-- D1 must be the secondary gateway
-- The AD must have a difference of 10
-
+~~~
 !@A2
 conf t
  ip route 0.0.0.0 0.0.0.0 192.168.1.__  __
  ip route 0.0.0.0 0.0.0.0 192.168.1.__  __
  end
+~~~
 
-Ans
+<br>
+<br>
 
+&nbsp;
+---
+&nbsp;
+
+### ANSWER
+
+<details>
+<summary>Show Answer</summary>
+
+~~~
 !@A2
 conf t
  ip route 0.0.0.0 0.0.0.0 192.168.1.130  1
  ip route 0.0.0.0 0.0.0.0 192.168.1.129  10
  end
+~~~
 
+</details>
 
 
 ---
