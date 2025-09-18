@@ -1507,13 +1507,19 @@ conf t
   end
 ~~~
 
+<br>
+<br>
 
-Exercise 12: Configure OSPF on R4 with the following settings:
+---
+&nbsp;
+
+### 🎯 Excercise 12: Configure OSPF on R4 with the following settings:
 - Process ID must be 1
 - Advertise all connected routes that belong to OSPF area 0
 - All of R4's interface belongs to Area 0
 - Set R4's router id for OSPF as its loopback 4 IP
 
+~~~
 !@R4
 conf t
  router ___  __
@@ -1521,10 +1527,21 @@ conf t
   network __.__.__.__  __.__.__.__ area __
   network __.__.__.__  __.__.__.__ area __
   end
+~~~
 
+<br>
+<br>
 
-Ans
+&nbsp;
+---
+&nbsp;
 
+### ANSWER
+
+<details>
+<summary>Show Answer</summary>
+
+~~~
 !@R4
 conf t
  router ospf 1
@@ -1532,25 +1549,66 @@ conf t
   network 4.4.4.4 0.0.0.0 area 0
   network 10.1.1.8 0.0.0.3 area 0
   end
+~~~
+
+</details>
+
+<br>
+<br>
+
+---
+&nbsp;
+
+### 🎯 Excercise 13: Configure OSPF on R2 with the following settings:
+- Process ID must be 1
+- Advertise all connected routes that belong to OSPF area 0
+- All of R2's interface belongs to Area 0
+- Set R2's router id for OSPF as its loopback 2 IP
+
+~~~
+!@R2
+conf t
 
 
-OSPF Interface-specific network advertisement.
 
+
+
+  end
+~~~
+
+<br>
+<br>
+
+&nbsp;
+---
+&nbsp;
+
+### ANSWER
+
+<details>
+<summary>Show Answer</summary>
+	
+~~~
 !@R2
 conf t
  router ospf 1
   router-id 2.2.2.2
-  exit
- int lo2
-  ip ospf 1 area 0
-  exit
- int e1/1
-  ip ospf 1 area 0
-  exit
- int e1/2
-  ip ospf 1 area 0
+  network 2.2.2.2 0.0.0.0 area 0
+  network 10.1.1.0 0.0.0.3 area 0
+  network 10.1.1.4 0.0.0.3 area 0
   end
+~~~
 
+</details>
+
+<br>
+<br>
+
+---
+&nbsp;
+
+### OSPF Interface-specific network advertisement.
+~~~
 !@R1
 conf t
  router ospf 1
@@ -1562,6 +1620,10 @@ conf t
  int e1/0
   ip ospf 1 area 0
   end
+~~~
+
+
+
 
 ---
 
