@@ -1084,15 +1084,11 @@ traceroute 192.168.1.130
 
 <br>
 
-Why longest prefix?
-
-<br>
-
 <details>
 <summary>Why longest prefix?</summary>
 
-### `1 1 1 1   1 1 1 1   .   1 1 1 1   1 1 1 1   .   1 1 1 1   1 1 1 1   .   1 1 1 0   0 0 0 0` = /27
-### `1 1 1 1   1 1 1 1   .   1 1 1 1   1 1 1 1   .   1 1 1 1   1 1 1 1   .   1 1 1 1   1 1 1 1` = /32
+### `1 1 1 1   1 1 1 1   .   1 1 1 1   1 1 1 1   .   1 1 1 1   1 1 1 1   .   1 1 1 0   0 0 0 0`
+### `1 1 1 1   1 1 1 1   .   1 1 1 1   1 1 1 1   .   1 1 1 1   1 1 1 1   .   1 1 1 1   1 1 1 1`
 
 </details>
 
@@ -1344,53 +1340,51 @@ conf t
 ---
 &nbsp;
 
-Data Structure
-1. show ip eigrp neighbors : Neighbor Table
-2. show ip eigrp interfaces : Interface Table
-3. show ip eigrp topology : Topology Table
+### EIGRP Database
+1. __`show ip eigrp neighbors`__ : Neighbor Table
+2. __`show ip eigrp interfaces`__ : Interface Table
+3. __`show ip eigrp topology`__ : Topology Table
 
-Verify:
+&nbsp;
+---
+&nbsp;
 
-show ip protocols
-show ip eigrp neighbors
-show ip eigrp interfaces
-show ip eigrp topology
-show ip route eigrp
+## Path Selection Process : Admin Distance & Metric Cost
+1. __Longest Prefix Match (LPM)__  
+2. __Administrative Distance__
+3. __Metric Cost__
 
-
-
-Path Selection Rules
-
-1. 
-2. Administrative Distance
-3. Metric Cost
-
+~~~
 !@R4
 show ip route
+~~~
 
-C Connected AD:
-S Static AD:
-D EIGRP AD: 
-EIGRP Metric: 
+<br>
 
+| Legend | Routing Protocol | Administrative Distance | Metric |
+| ---    | ---              | ---                     | ---    |
+| C      | Connected        |                         |        |
+| S      | Static           |                         |        |
+| D      | EIGRP            |                         |        |
 
-What makes EIGRP a distance Vector protocol?
+<br>
+<br>
 
+What makes __EIGRP__ a __Distance Vector Protocol__?
+~~~
 !@R4
+show ip protocols
 show ip eigrp topology
-show ip eigrp protocols
+~~~
+
+<br>
 
 EIGRP Path Selection:
 Reported Distance (RD) > Feasible Successor (Backup)
 Feasible Distance (FD) >  Successor (Lowest Cost)
-
 	Successor & Feasible successor (Backup)
-	
 	Feasability Condition
 		An EIGRP route is a feasible successor route if the RD from the neighbor is less than the FD of the successor route.
-
-FD/RD
-
 
 Advantage of EIGRP
 EIGRP Loadbalancing Unequal Cost Paths
